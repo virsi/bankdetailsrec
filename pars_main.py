@@ -15,7 +15,7 @@ lines_with_AO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.
 lines_with_OOO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.txt', 'ООО')
 
 #Функция парсинга 
-def parse_text_file(filename):
+def parse_text_file(filename, lines_with_AO, lines_with_OOO):
     key_words = ['инн', 'бик', 'кпп', "АО", 'ООО', 'р/с', 'к/с', 'л/с', 'сч. №', 'кбк']
     ifnotbik = ["АО", 'ООО']
     result = {}
@@ -82,10 +82,10 @@ def parse_text_file(filename):
 
 
     return result
-
+'''
 filename = 'image2text/chek2text.txt'
 res = parse_text_file(filename)
-print(res)
+print(res)'''
 
 
 

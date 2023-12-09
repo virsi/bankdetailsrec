@@ -49,11 +49,13 @@ for item in result['items']:
 				f.write(string.strip()+'\n')
 
             # Извлечение реквизитов
-			print(pars_main('image2text/chek2text.txt'))
+			lines_with_AO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'АО')
+			lines_with_OOO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'ООО')
+			print(pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO))
 		
 			# Удаление файлов
 			#os.remove(f'Счета/file_{index}.jpg')
-			#os.remove('image2text/chek2text.txt')
+			#os.remove(f'image2text/chek2text{index}.txt')
 
 		# Обработка файлов JPG		
 		if header == 'jpg':
@@ -67,11 +69,14 @@ for item in result['items']:
 				f.write(string.strip()+'\n')
 			
 			# Извлечение реквизитов
-			print(pars_main('image2text/chek2text.txt'))
+			lines_with_AO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'АО')
+			lines_with_OOO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'ООО')
+			print(pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO))
+		
 
 			# Удаление файлов
 			#os.remove(f'Счета/file_{index}.jpg')
-			#os.remove('image2text/chek2text.txt')
+			#os.remove(f'image2text/chek2text{index}.txt')
 
 	except IndexError:
 		pass
