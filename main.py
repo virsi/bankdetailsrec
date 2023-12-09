@@ -63,7 +63,7 @@ for item in result['items']:
 				file.write(response.content)
 			image = Image.open(f'Счета/file_{index}.jpg')
 			string = pytesseract.image_to_string(image, lang="rus")
-			with open('image2text/chek2text.txt', 'a') as f:
+			with open(f'image2text/chek2text{index}.txt', 'a') as f:
 				f.write(string.strip()+'\n')
 			
 			# Извлечение реквизитов
