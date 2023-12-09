@@ -1,0 +1,23 @@
+
+
+import pytesseract
+from PIL import Image
+from pdf2image import convert_from_path
+
+file = ''
+def file_extension(file=file):
+    if 'pdf' in file:
+		# Преобразование файла PDF в файл JPEG
+        pages = convert_from_path('test_1.pdf', 500)
+        for i, page in enumerate(pages):
+            page.save(f'out{i}.jpg', 'JPEG')
+    elif 'jpg' in file or 'jpeg' in file or 'png' in file:
+        return None
+    else:
+        print("Неправильное расширение загружаемого файла")
+# Преобразование файла JPEG в текст
+image = Image.open('out0.jpg')
+
+string = pytesseract.image_to_string(image, lang="ru")
+
+print(string)
