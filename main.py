@@ -1,10 +1,12 @@
-import pytesseract
-import os
 from PIL import Image
 from pdf2image import convert_from_path
+import pytesseract
+import os
 import conf
 import requests
 import pars_main
+import changestatus
+import createnewitem
 
 #авторизация пользователя
 r = requests.post('https://api.officemeister.online/v1/auth', json={"api-key": conf.apikey})
@@ -48,15 +50,6 @@ for item in result['items']:
 			with open(f'image2text/chek2text{index}.txt', 'a') as f:
 				f.write(string.strip()+'\n')
 
-            # Извлечение реквизитов
-			lines_with_AO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'АО')
-			lines_with_OOO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'ООО')
-			print(pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO))
-		
-			# Удаление файлов
-			#os.remove(f'Счета/file_{index}.jpg')
-			#os.remove(f'image2text/chek2text{index}.txt')
-
 		# Обработка файлов JPG		
 		if header == 'jpg':
 			
@@ -67,30 +60,19 @@ for item in result['items']:
 			string = pytesseract.image_to_string(image, lang="rus")
 			with open(f'image2text/chek2text{index}.txt', 'a') as f:
 				f.write(string.strip()+'\n')
-			
-			# Извлечение реквизитов
-			lines_with_AO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'АО')
-			lines_with_OOO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'ООО')
-			print(pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO))
-		
 
-			# Удаление файлов
-			#os.remove(f'Счета/file_{index}.jpg')
-			#os.remove(f'image2text/chek2text{index}.txt')
+	# Извлечение реквизитов
+		lines_with_AO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'АО')
+		lines_with_OOO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'ООО')
+		print(pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO))
+
+		# Удаление файлов
+		os.remove(f'Счета/file_{index}.jpg')
+		os.remove(f'image2text/chek2text{index}.txt')
 
 	except IndexError:
 		pass
 	except ValueError:
 		pass
-
-"""
-# Преобразование файла JPEG в текст
-image = Image.open('out/out0.jpg')
-
-string = pytesseract.image_to_string(image, lang="rus")
-
-with open('image2text/chek2text.txt', 'a') as f:
-    f.write(string.strip()+'\n')
-
-#os.remove('out/out0.jpg')
-"""
+	except FileNotFoundError:
+		pass

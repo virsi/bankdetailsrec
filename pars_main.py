@@ -11,8 +11,8 @@ def find_lines_with_keyword_in_first_20_lines(file_path, keyword):
                 found_lines.append(line)
     return found_lines
 
-lines_with_AO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.txt', 'АО')
-lines_with_OOO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.txt', 'ООО')
+# lines_with_AO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.txt', 'АО')
+# lines_with_OOO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.txt', 'ООО')
 
 #Функция парсинга 
 def parse_text_file(filename, lines_with_AO, lines_with_OOO):
@@ -32,10 +32,10 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
             if len(matches) == 0:
                 for _ in ifnotbik:
                     if _ == 'АО':
-                        if len(lines_with_AO) != 0:
+                        if len(lines_with_AO) != 0 and str(lines_with_AO[0])[-10:-1].isdigit():
                             matches.append(lines_with_AO[0][-10:-1])
                     elif _ == 'ООО':
-                        if len(lines_with_OOO) != 0:
+                        if len(lines_with_OOO) != 0 and str(lines_with_AO[0])[-10:-1].isdigit():
                             matches.append(lines_with_OOO[0][-10:-1])
         else:
             matches = re.findall(rf'\b{key_word}\s*(?:\||\s)*(\d+)', content)
@@ -74,41 +74,53 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
     # Частичная проверка значений
     for key in result:
         if key == 'инн':
-            pass
-        elif key == 'бик':
-            for elem in range(len(result[key])):
-                if len(result[key][elem]) != 9:
-                    result[key][elem] = result[key][elem][result[key][elem].index('0'):]
-
+            for elem in result[key]:
+                if len(elem) != 10 or  not str(elem).isdigit():
+                    try:
+                        result[key] = result[key].remove(elem)
+                    except ValueError:
+                        pass
+        if key == 'бик':
+            for elem in result[key]:
+                if (not str(elem).isdigit()) or str(elem)[0] != '0' or len(elem) != 9:
+                    try:
+                        result[key] = result[key].remove(elem)
+                    except ValueError:
+                        pass
+        if key == 'кпп':
+            for elem in result[key]:
+                if not str(elem).isdigit() or len(elem) != 9:
+                    try:
+                        result[key] = result[key].remove(elem)
+                    except ValueError:
+                        pass
+        if key == 'р/с':
+            for elem in result[key]:
+                if str(elem) == '1' or len(elem) != 20:
+                    try:
+                        result[key] = result[key].remove(elem)
+                    except ValueError:
+                        pass
+        if key == 'сч. №':
+            for elem in result[key]:
+                if str(elem) == '1' or len(elem) != 20:
+                    try:
+                        result[key] = result[key].remove(elem)
+                    except ValueError:
+                        pass
+        if key == 'л/с':
+            for elem in result[key]:
+                if str(elem) == '1' or len(elem) != 20:
+                    try:
+                        result[key] = result[key].remove(elem)
+                    except ValueError:
+                        pass
+        if key == 'к/с':
+            for elem in result[key]:
+                if not str(elem).isdigit() or len(elem) != 20:
+                    try:
+                        result[key] = result[key].remove(elem)
+                    except ValueError:
+                        pass
 
     return result
-'''
-filename = 'image2text/chek2text.txt'
-res = parse_text_file(filename)
-print(res)'''
-
-
-
-
-
-
-
-
-"""
-    for key_word in key_words:
-        # Находим все совпадения ключевого слова и ищем значение после пробела
-        #matches = re.findall(rf'\b{key_word}\s*\s*(\d+)', content)
-        if key_word == 'АО':
-            print(lines_with_AO)
-            matches = []
-            if len(lines_with_AO) != 0:
-                matches.append(lines_with_AO[0][-10:-1])
-        elif key_word == 'ООО':
-            print(lines_with_OOO)
-            matches = []
-            if len(lines_with_OOO) != 0:
-                matches.append(lines_with_OOO[0][-10:-1])
-        else:
-            matches = re.findall(rf'\b{key_word}\s*(?:\||\s)*(\d+)', content)
-
-"""
