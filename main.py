@@ -21,58 +21,64 @@ result=r.json()
 #print(result['items'])
 
 for item in result['items']:
-
-	try:
-		
-		url = item['docs'][0]['filepath']
-		response = requests.get(url)
-		index_dot = response.headers['Content-Disposition'].index('.')
-		header = response.headers['Content-Disposition'][index_dot + 1::]
-		index = item['itemid']
-		
-        # Обработка файлов PDF
-		if header == 'pdf':
+	if item['statusid'] == '12': # or item['statusid'] == '13':
+		try:
 			
-            # Преобразование файла PDF в JPG
-			with open(f'Счета/file_{index}.pdf', 'wb') as file:
-				file.write(response.content)
-			pages = convert_from_path(f'Счета/file_{index}.pdf', 500)
-			for i, page in enumerate(pages):
-				if i == 0:
-					page.save(f'Счета/file_{index}.jpg', 'JPEG')
+			url = item['docs'][0]['filepath']
+			response = requests.get(url)
+			index_dot = response.headers['Content-Disposition'].index('.')
+			header = response.headers['Content-Disposition'][index_dot + 1::]
+			index = item['itemid']
+			
+			# Обработка файлов PDF
+			if header == 'pdf':
 				
-            # Удаление файла PDF
-			os.remove(f'Счета/file_{index}.pdf')
-			
-			# Преобразование файла JPG в TXT 
-			image = Image.open(f'Счета/file_{index}.jpg')
-			string = pytesseract.image_to_string(image, lang="rus")
-			with open(f'image2text/chek2text{index}.txt', 'a') as f:
-				f.write(string.strip()+'\n')
+				# Преобразование файла PDF в JPG
+				with open(f'Счета/file_{index}.pdf', 'wb') as file:
+					file.write(response.content)
+				pages = convert_from_path(f'Счета/file_{index}.pdf', 500)
+				for i, page in enumerate(pages):
+					if i == 0:
+						page.save(f'Счета/file_{index}.jpg', 'JPEG')
+					
+				# Удаление файла PDF
+				os.remove(f'Счета/file_{index}.pdf')
+				
+				# Преобразование файла JPG в TXT 
+				image = Image.open(f'Счета/file_{index}.jpg')
+				string = pytesseract.image_to_string(image, lang="rus")
+				with open(f'image2text/chek2text{index}.txt', 'a') as f:
+					f.write(string.strip()+'\n')
 
-		# Обработка файлов JPG		
-		if header == 'jpg':
-			
-			# Преобразование файла JPG в TXT 
-			with open(f'Счета/file_{index}.jpg', 'wb') as file:
-				file.write(response.content)
-			image = Image.open(f'Счета/file_{index}.jpg')
-			string = pytesseract.image_to_string(image, lang="rus")
-			with open(f'image2text/chek2text{index}.txt', 'a') as f:
-				f.write(string.strip()+'\n')
+			# Обработка файлов JPG		
+			if header == 'jpg':
+				
+				# Преобразование файла JPG в TXT 
+				with open(f'Счета/file_{index}.jpg', 'wb') as file:
+					file.write(response.content)
+				image = Image.open(f'Счета/file_{index}.jpg')
+				string = pytesseract.image_to_string(image, lang="rus")
+				with open(f'image2text/chek2text{index}.txt', 'a') as f:
+					f.write(string.strip()+'\n')
 
-	# Извлечение реквизитов
-		lines_with_AO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'АО')
-		lines_with_OOO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'ООО')
-		print(pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO))
+		# Извлечение реквизитов
+			lines_with_AO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'АО')
+			lines_with_OOO = pars_main.find_lines_with_keyword_in_first_20_lines(f'image2text/chek2text{index}.txt', 'ООО')
+			pars_result = pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO)
+			print(pars_main.parse_text_file(f'image2text/chek2text{index}.txt', lines_with_AO, lines_with_OOO))
 
-		# Удаление файлов
-		os.remove(f'Счета/file_{index}.jpg')
-		os.remove(f'image2text/chek2text{index}.txt')
+			#Создание платежного поручения
+			createnewitem.getPoruchenie(pars_result) # необходимо разобраться с аргументами
+			#Смена статуса счета
+			changestatus.status_change(0) # необходимо разобраться с аргументами
 
-	except IndexError:
-		pass
-	except ValueError:
-		pass
-	except FileNotFoundError:
-		pass
+			# Удаление файлов
+			os.remove(f'Счета/file_{index}.jpg')
+			os.remove(f'image2text/chek2text{index}.txt')
+
+		except IndexError:
+			pass
+		except ValueError:
+			pass
+		except FileNotFoundError:
+			pass

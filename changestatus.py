@@ -1,7 +1,7 @@
 import requests
 import conf
 
-def status_change(type):
+def status_change(status_doc):
 #авторизация пользователя
     r = requests.post('https://api.officemeister.online/v1/auth', json={"api-key": conf.apikey})
     result=r.json()
@@ -13,10 +13,10 @@ def status_change(type):
     url = 'https://api.officemeister.online/v1/jorn/5768/changeStatus' 
     headers = {'Authorization': 'Bearer '+result['token']}  
 
-    if type == 1:
+    if status_doc == 1:
         r = requests.post(url, headers=headers, json={'statusId': '59'} )
         print(r)
-    if type == 0:
+    if status_doc == 0:
         r = requests.post(url, headers=headers, json={'statusId': '60'} )
         print(r)
     
