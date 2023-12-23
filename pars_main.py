@@ -86,11 +86,15 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
         if result[key] != None:
             if key == 'инн':
                 for elem in result[key]:
-                    if len(elem) != 10 or  not str(elem).isdigit():
+                    if len(elem) != 10 or not str(elem).isdigit():
                         try:
                             result[key] = result[key].remove(elem)
                         except ValueError:
                             pass
+                    if result[key] != None:
+                        result[key] = result[key][0]
+                    else:
+                        result[key] = str(None)
             if key == 'бик':
                 for elem in result[key]:
                     if (not str(elem).isdigit()) or str(elem)[0] != '0' or len(elem) != 9:
@@ -98,6 +102,10 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
                             result[key] = result[key].remove(elem)
                         except ValueError:
                             pass
+                    if result[key] != None:
+                        result[key] = result[key][0]
+                    else:
+                        result[key] = str(None)
             if key == 'кпп':
                 for elem in result[key]:
                     if not str(elem).isdigit() or len(elem) != 9:
@@ -105,6 +113,10 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
                             result[key] = result[key].remove(elem)
                         except ValueError:
                             pass
+                    if result[key] != None:
+                        result[key] = result[key][0]
+                    else:
+                        result[key] = str(None)
             if key == 'р/с':
                 for elem in result[key]:
                     if str(elem) == '1' or len(elem) != 20:
@@ -112,6 +124,10 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
                             result[key] = result[key].remove(elem)
                         except ValueError:
                             pass
+                    if result[key] != None:
+                        result[key] = result[key][0]
+                    else:
+                        result[key] = str(None)
             if key == 'сч. №':
                 for elem in result[key]:
                     if str(elem) == '1' or len(elem) != 20:
@@ -119,6 +135,10 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
                             result[key] = result[key].remove(elem)
                         except ValueError:
                             pass
+                    if result[key] != None:
+                        result[key] = result[key][0]
+                    else:
+                        result[key] = str(None)
             if key == 'л/с':
                 for elem in result[key]:
                     if str(elem) == '1' or len(elem) != 20:
@@ -126,6 +146,10 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
                             result[key] = result[key].remove(elem)
                         except ValueError:
                             pass
+                    if result[key] != None:
+                        result[key] = result[key][0]
+                    else:
+                        result[key] = str(None)
             if key == 'к/с':
                 for elem in result[key]:
                     if not str(elem).isdigit() or len(elem) != 20:
@@ -133,5 +157,9 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
                             result[key] = result[key].remove(elem)
                         except ValueError:
                             pass
+                    if result[key] != None:
+                        result[key] = result[key][0]
+                    else:
+                        result[key] = str(None)
 
     return result

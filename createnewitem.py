@@ -9,6 +9,6 @@ def getPoruchenie(massiv):
 	url = 'https://api.officemeister.online/v1/jorn/addItem' 
 	headers = {'Authorization': 'Bearer '+result['token']}  
 	r = requests.post(url, headers=headers, json={'description': 'Распознано роботом', 'itemsubtypeid': 107, 
-			'notnamedatributes': {'inn': massiv['инн'][0], 'kpp': massiv['кпп'][0], 'bik': massiv['бик'][0], 'account': massiv['сч. №'][0],
+			'notnamedatributes': {'inn': massiv['инн'], 'kpp': massiv['кпп'], 'bik': massiv['бик'], 'account': massiv['сч. №'],
 			'req': None, 'sum': None}})
 	print(r)

@@ -21,7 +21,7 @@ result=r.json()
 #print(result['items'])
 
 for item in result['items']:
-	if item['statusid'] == '12': # or item['statusid'] == '13':
+	if item['statusid'] == '12' or item['statusid'] == '13':
 		try:
 			
 			url = item['docs'][0]['filepath']
@@ -70,7 +70,7 @@ for item in result['items']:
 			#Создание платежного поручения
 			createnewitem.getPoruchenie(pars_result) # необходимо разобраться с аргументами
 			#Смена статуса счета
-			changestatus.status_change(0) # необходимо разобраться с аргументами
+			changestatus.status_change(0, item['itemid']) # необходимо разобраться с аргументами
 
 			# Удаление файлов
 			os.remove(f'Счета/file_{index}.jpg')
