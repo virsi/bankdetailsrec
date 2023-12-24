@@ -11,4 +11,4 @@ def getPoruchenie(massiv):
 	r = requests.post(url, headers=headers, json={'description': 'Распознано роботом', 'itemsubtypeid': 107, 
 			'notnamedatributes': {'inn': massiv['инн'], 'kpp': massiv['кпп'], 'bik': massiv['бик'], 'account': massiv['сч. №'],
 			'req': None, 'sum': None}})
-	print(r)
+	print(r) #информация для отладки

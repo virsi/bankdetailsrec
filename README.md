@@ -23,3 +23,20 @@
 
 - АНО ДО "РОБОЛАТОРИЯ"
 - ООО «Диджитал репаблик»
+
+## Не забудте установить кое что:
+
+pip install -r requirements.txt
+
+brew install poppler
+git clone https://anongit.freedesktop.org/git/poppler/poppler.git
+/usr/local/Cellar/tesseract/5.3.3/bin/tesseract
+
+$ cd tesseract
+$ ./autogen.sh
+$ ./configure
+$ make
+$ sudo make install
+$ sudo ldconfig
+$ make training
+$ sudo make training-install

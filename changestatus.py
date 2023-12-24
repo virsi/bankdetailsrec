@@ -18,5 +18,5 @@ def status_change(status_doc, itemid):
         print(r)
     if status_doc == 0:
         r = requests.post(url, headers=headers, json={'statusId': '60'} )
-        print(r.text)
+        print(r.text) #информация для отладки
     

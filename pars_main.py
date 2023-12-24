@@ -11,10 +11,8 @@ def find_lines_with_keyword_in_first_20_lines(file_path, keyword):
                 found_lines.append(line)
     return found_lines
 
-# lines_with_AO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.txt', 'АО')
-# lines_with_OOO = find_lines_with_keyword_in_first_20_lines('image2text/chek2text.txt', 'ООО')
 
-# по умолчанию передавать None
+
 #Функция парсинга 
 def parse_text_file(filename, lines_with_AO, lines_with_OOO):
     key_words = ['инн', 'бик', 'кпп', "АО", 'ООО', 'р/с', 'к/с', 'л/с', 'сч. №', 'кбк']
@@ -33,7 +31,6 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
 
     for key_word in key_words:
         # Находим все совпадения ключевого слова и ищем значение после пробела
-        #matches = re.findall(rf'\b{key_word}\s*\s*(\d+)', content)
         if key_word == 'бик':
             matches = re.findall(rf'\b{key_word}\s*(?:\||\s)*(\d+)', content)
             if len(matches) == 0:
@@ -47,8 +44,7 @@ def parse_text_file(filename, lines_with_AO, lines_with_OOO):
         else:
             matches = re.findall(rf'\b{key_word}\s*(?:\||\s)*(\d+)', content)
 
-        # Реализовать удаление реквизитов второго юр лица
-        # Удаление реквизитов "Роболатории"
+        # Удаление реквизитов "Роболатории" и "Диджитал Репаблик"
         if key_word == 'инн':
             try:
                 matches.remove('5032225870')
