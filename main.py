@@ -35,7 +35,7 @@ for element in range(int(result['pages'])):
 	for item in result['items']:
 		if item['statusid'] == '12' or item['statusid'] == '13':
 			try:
-				
+				print(item['itemid'])
 				url = item['docs'][0]['filepath']
 				response = requests.get(url)
 				index_dot = response.headers['Content-Disposition'].index('.')
